@@ -1,6 +1,6 @@
 
 This is a Full-Stack web coding challenge.
-
+( https://github.com/hiddenfounders/web-coding-challenge/blob/master/README.md )
 ## Idea of the app
 The task is to implement an app that lists shops nearby. 
 
