@@ -1,5 +1,7 @@
 const winston = require('winston');
 
+const passport = require('passport');
+
 const userService = require('./user.service');
 
 exports.signUp = async (req, resp) => {
@@ -18,7 +20,28 @@ exports.signUp = async (req, resp) => {
 };
 
 exports.signIn = (req, resp) => {
-  resp.status(400).json('Login');
+  winston.debug('Authenticating ...')
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      winston.error('Sign-in Controller Error');
+      winston.debug(err);
+      resp.status(500).json('Login Server Error');
+    }
+    if (!user) {
+      winston.info(`User with provided credentials not authenticated ( ${user.email} )`);
+      resp.status(401).json('Login not authorized');
+    } else {
+      winston.info(`User authenticated successfully ${user.email}`);
+      const token = userService.generateToken(user);
+      resp.status(200).json({
+        _id: user._id,
+        email: user.email,
+        name: user.name,
+        token: token
+      });
+    }
+  })(req,resp);
+
 };
 
 exports.getPreferred = (req, resp) => {

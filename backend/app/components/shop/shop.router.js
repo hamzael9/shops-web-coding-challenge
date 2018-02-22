@@ -4,6 +4,7 @@ const router = express.Router();
 
 const shopController = require('./shop.controller');
 
-router.get('/nearby', shopController.getNearby);
-
-module.exports = router;
+module.exports = (auth) => {
+  router.get('/nearby', auth, shopController.getNearby);
+  return router;
+}

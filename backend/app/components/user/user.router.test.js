@@ -11,7 +11,7 @@ module.exports = (app, chai) => {
             password: 'passpass'
           };
           chai.request(app)
-              .post('/api/v1/users/signup')
+              .post('/api/v1/users/sign-up')
               .send(user)
               .end((err, res) => {
                   res.should.have.status(200);
@@ -20,8 +20,13 @@ module.exports = (app, chai) => {
         });
 
       it('Sign-in', (done) => {
+        let credentials = {
+          email: "hamza@gmail.com",
+          password: "passpass"
+        }
           chai.request(app)
-              .post('/api/v1/users/signin')
+              .post('/api/v1/users/sign-in')
+              .send(credentials)
               .end((err, res) => {
                   res.should.have.status(200);
                   done();

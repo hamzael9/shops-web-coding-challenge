@@ -1,5 +1,4 @@
 const express = require('express');
-const expressSession = require('express-session');
 
 const bodyParser = require('body-parser');
 
@@ -13,20 +12,19 @@ const webConfig = require('./config/web')[process.env.NODE_ENV || 'dev'];
 
 winston.level = appConfig.APP_LOG_LEVEL;
 
+// DB Setup
+require('./app.db')("mongo");
+
+// Passport setup
+require('./app.passport')(passport);
+
 const app = express();
 app.use(bodyParser.json());
 app.use(morgan(webConfig.HTTP_LOGGER_FORMAT));
-app.use(expressSession({
-  secret: webConfig.SESSION_SECRET
-}));
 app.use(passport.initialize());
-app.use(passport.session());
 
-// DB Setup
-require('./app.db')("mongo");
-// Passport setup
-require('./app.passport')(passport);
 // Routes setup
 require('./app.routes')(app);
+
 
 module.exports = app;
