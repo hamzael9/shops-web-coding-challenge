@@ -35,7 +35,7 @@ module.exports = (app, chai) => {
 
       it('Get Preferred Shops ', (done) => {
           chai.request(app)
-              .get('/api/v1/users/:id/preferred')
+              .get('/api/v1/users/preferred')
               .end((err, res) => {
                   res.should.have.status(200);
                   res.body.length.should.be.at.least(1);
@@ -45,7 +45,7 @@ module.exports = (app, chai) => {
 
         it('Add Preferred Shop ', (done) => {
             chai.request(app)
-                .post('/api/v1/users/:id/preferred')
+                .post('/api/v1/users/preferred')
                 .end((err, res) => {
                     res.should.have.status(200);
                     done();
@@ -54,7 +54,7 @@ module.exports = (app, chai) => {
 
           it('Delete Preferred Shop ', (done) => {
               chai.request(app)
-                  .delete('/api/v1/users/:id/preferred')
+                  .delete('/api/v1/users/preferred')
                   .end((err, res) => {
                       res.should.have.status(200);
                       done();

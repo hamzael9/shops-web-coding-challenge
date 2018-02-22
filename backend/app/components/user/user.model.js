@@ -6,9 +6,13 @@ const UserSchema = new Schema({
   name: { type: String, default: '' },
   email: { type: String, default: '' },
   password: { type: String, default: '' },
-  liked_shops : [{
-    shopId: { type : Schema.ObjectId, ref: 'Shop' },
-    likedTime: {type: Date, default: Date.now}
+  likedShops : [{
+    shopId: { type : Schema.Types.ObjectId, ref: 'Shop' },
+    likedTime: { type: Date, default: Date.now }
+  }],
+  dislikedShops : [{
+    shopId: { type : Schema.Types.ObjectId, ref: 'Shop' },
+    dislikedTime: { type: Date, default: Date.now }
   }]
 });
 

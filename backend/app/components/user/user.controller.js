@@ -3,8 +3,9 @@ const winston = require('winston');
 const passport = require('passport');
 
 const userService = require('./user.service');
+const shopService = require('../shop/shop.service');
 
-exports.signUp = async (req, resp) => {
+exports.signUpHandler = async (req, resp) => {
   let userObj = {};
   userObj.name = req.body.name;
   userObj.email = req.body.email;
@@ -19,7 +20,7 @@ exports.signUp = async (req, resp) => {
 
 };
 
-exports.signIn = (req, resp) => {
+exports.signInHandler = (req, resp) => {
   winston.debug('Authenticating ...')
   passport.authenticate('local', (err, user, info) => {
     if (err) {
@@ -44,15 +45,83 @@ exports.signIn = (req, resp) => {
 
 };
 
-exports.getPreferred = (req, resp) => {
-  let shops = [];
-  resp.status(200).json(shops);
+
+exports.getLikedHandler = async (req, resp) => {
+  winston.debug(`Getting Liked Shops for user ${req.token.email}`);
+  let shops = await userService.getLikedShops(req.token.id);
+  if (shops === false) {
+    resp.status(500).json('Error');
+  } else {
+    resp.status(200).json(shops);
+  }
 };
 
-exports.addPreferred = (req, resp) => {
-  resp.status(400).json('added shop to preferred shops');
+exports.addToLikedHandler = async (req, resp) => {
+  let idShop = req.params.id;
+  let idUser = req.token.id;
+  winston.debug(`Adding shop ${idShop} to Liked list of user ${idUser}`);
+
+  let shop = await shopService.getById(idShop);
+  if (shop === false || shop === null) {
+    resp.status(500).json();
+  }
+  if (await userService.likeShop(idUser, shop) ) {
+    resp.status(200).json();
+  } else {
+    resp.status(500).json();
+  }
+
 };
 
-exports.deletePreferred = (req, resp) => {
-  resp.status(400).json('delete shop from preferred shops');
+
+exports.removeFromLikedHandler = async (req, resp) => {
+  let idShop = req.params.id;
+  let idUser = req.token.id;
+  winston.debug(`Removing shop ${idShop} from liked list of user ${idUser}`);
+
+  let shop = await shopService.getById(idShop);
+  if (shop === false || shop === null) {
+    resp.status(500).json();
+  }
+  if (await userService.unlikeShop(idUser, shop) ) {
+    resp.status(200).json();
+  } else {
+    resp.status(500).json();
+  }
+
+};
+
+exports.addToDislikedHandler = async (req, resp) => {
+
+  let idShop = req.params.id;
+  let idUser = req.token.id;
+  winston.debug(`Adding shop ${idShop} to Disliked list of user ${idUser}`);
+
+  let shop = await shopService.getById(idShop);
+  if (shop === false || shop === null) {
+    resp.status(500).json();
+  }
+  if (await userService.dislikeShop(idUser, shop) ) {
+    resp.status(200).json();
+  } else {
+    resp.status(500).json();
+  }
+
+};
+
+
+exports.removeFromDislikedHandler = async (req, resp) => {
+  let idShop = req.params.id;
+  let idUser = req.token.id;
+  winston.debug(`Removing shop ${idShop} from disliked list of user ${idUser}`);
+
+  let shop = await shopService.getById(idShop);
+  if (shop === false || shop === null) {
+    resp.status(500).json();
+  }
+  if (await userService.undislikeShop(idUser, shop) ) {
+    resp.status(200).json();
+  } else {
+    resp.status(500).json();
+  }
 };
