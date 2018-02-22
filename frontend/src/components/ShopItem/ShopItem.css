@@ -1,0 +1,48 @@
+.shop-item {
+  display: inline-block;
+  height: 200px;
+  width: 200px;
+  margin: 20px;
+  border: 1px solid black;
+}
+
+.shop-item .up {
+  height: 20%;
+}
+
+.shop-item .up .shop-title {
+  font-size: 20px;
+}
+
+.shop-item .middle {
+  height: 60%;
+}
+
+.shop-item .down {
+  height: 20%;
+}
+
+.shop-item .down .shop-btn {
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  border: none;
+  font-size: 16px;
+  margin: 5px;
+  padding: 5px;
+  width: 70px;
+  cursor: pointer;
+  border: 2px solid white;
+}
+
+.shop-item .down .shop-btn:hover {
+  border: 2px solid black;
+}
+
+.shop-item .down .like-btn {
+  background-color: green;
+}
+
+.shop-item .down .dislike-btn {
+  background-color: red;
+}

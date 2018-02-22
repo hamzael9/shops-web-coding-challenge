@@ -1,0 +1,15 @@
+.App-menu a {
+  margin-left: 40px;
+  margin-top: 5px;
+  text-decoration: none;
+  color: white;
+}
+
+.App-menu a:hover {
+  color: cyan;
+}
+
+.App-menu a.selected {
+  border-bottom: 1px solid cyan;
+  color: cyan;
+}
