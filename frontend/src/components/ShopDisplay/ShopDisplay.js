@@ -11,8 +11,18 @@ class ShopDisplay extends Component {
     this.state = {
       data: []
     }
+    //this.handleItemUnmount = this.handleItemUnmount.bind(this);
   }
 
+  handleItemUnmount (id) {
+    console.log('Removing item ' + id);
+    let res = this.state.data.filter (item => {
+      return item.props.id !== id;
+    });
+    this.setState({
+      data: res
+    })
+  }
 
   componentDidMount() {
     this.getShops("/shops/nearby");
@@ -35,7 +45,7 @@ class ShopDisplay extends Component {
 
             console.log(data);
             for (let s of data) {
-              shops.push (<ShopItem key={s._id} id={s._id} name={s.name} img={s.picture} preferred={false}/>);
+              shops.push (<ShopItem key={s._id} id={s._id} name={s.name} img={s.picture} preferred={false} selfUnmount={this.handleItemUnmount.bind(this)}/>);
             }
 
             this.setState( {
@@ -57,10 +67,10 @@ class ShopDisplay extends Component {
 
             console.log(data);
             for (let s of data) {
-              shops.push (<ShopItem key={s._id} id={s._id} name={s.name} img={s.picture} preferred={true} />);
+              shops.push (<ShopItem key={s._id} id={s._id} name={s.name} img={s.picture} preferred={true} selfUnmount={this.handleItemUnmount.bind(this)}/>);
             }
 
-            this.setState( {
+            this.setState({
               data: shops
             });
 

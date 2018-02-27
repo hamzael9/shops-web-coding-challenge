@@ -21,7 +21,7 @@ exports.signUpHandler = async (req, resp) => {
 };
 
 exports.signInHandler = (req, resp) => {
-  winston.debug('Authenticating ...')
+  winston.debug('Authenticating ...');
   passport.authenticate('local', (err, user, info) => {
     if (err) {
       winston.error('Sign-in Controller Error');
@@ -48,10 +48,16 @@ exports.signInHandler = (req, resp) => {
 
 exports.getLikedHandler = async (req, resp) => {
   winston.debug(`Getting Liked Shops for user ${req.token.email}`);
-  let shops = await userService.getLikedShops(req.token.id);
-  if (shops === false) {
+  let likedShops = await userService.getLikedShops(req.token.id);
+  if (likedShops === false) {
     resp.status(500).json('Error');
   } else {
+    let shops = [];
+    for (let s of likedShops) {
+      console.log('shop id : ' + s.shopId);
+      let t = await shopService.getById(s.shopId)
+      shops.push(t);
+    }
     resp.status(200).json(shops);
   }
 };

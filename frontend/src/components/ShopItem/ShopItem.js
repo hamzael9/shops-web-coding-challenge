@@ -7,12 +7,25 @@ class ShopItem extends Component {
     super(props);
   }
 
+  componentWillUnmount () {
+    console.log('Unmounting shop item ');
+  }
+
   likeClickHandler (ev) {
     console.log('like');
     if (!this.props.preferred) {
       fetch (`http://localhost:3000/api/v1/users/shops/liked/${this.props.id}`, { headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}, method: 'POST' })
-      .then ( (resp) => { if (resp.status === 200) { console.log ('OK'); } else { console.log(`Status returned ${resp.status}`); }} )
-      .catch( (err) => { console.error(err); } );
+      .then ( (resp) => {
+        if (resp.status === 200) {
+          console.log ('Shop Item added to preferred shops !');
+          this.props.selfUnmount(this.props.id);
+        }
+        else {
+          console.log(`Status returned ${resp.status}`); }
+        } )
+      .catch( (err) => {
+        console.error(err);
+      } );
     }
   }
 
@@ -29,7 +42,14 @@ class ShopItem extends Component {
     console.log('remove');
     if (this.props.preferred) {
       fetch (`http://localhost:3000/api/v1/users/shops/liked/${this.props.id}`, { headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}, method: 'DELETE' })
-      .then ( (resp) => { console.log ('OK'); } )
+      .then ( (resp) => {
+        if (resp.status === 200) {
+          console.log ('Shop Item removed from preferred shops !');
+          this.props.selfUnmount(this.props.id);
+        }
+        else {
+          console.log(`Status returned ${resp.status}`); }
+        } )
       .catch( (err) => { console.error(err); } );
     }
   }

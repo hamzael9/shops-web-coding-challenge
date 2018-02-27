@@ -1,6 +1,8 @@
 
 const winston = require('winston');
 
+const mongoose = require('mongoose');
+
 const Shop = require('./shop.model');
 
 const sortShops = (shops) => {
@@ -12,7 +14,7 @@ exports.getById = async (id) => {
     winston.debug(`Shop service getting by id ${id}`);
     return await Shop.findById(id);
   } catch (err) {
-    winston.error(`Shop Service: Error getting shop by id ${id}`)
+    winston.error(`Shop Service: Error getting shop by id ${id}`);
     winston.debug(err);
     return false;
   }

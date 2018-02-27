@@ -1,5 +1,4 @@
 const winston = require('winston');
-const mongoose = require ('mongoose');
 
 const User = require('./user.model');
 
