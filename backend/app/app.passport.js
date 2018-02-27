@@ -1,5 +1,7 @@
 const winston = require('winston');
 
+const bcrypt = require('bcrypt');
+
 const LocalStrategy = require('passport-local').Strategy;
 
 const User = require('./components/user/user.model');
@@ -17,7 +19,13 @@ module.exports = (passport) => {
         return done(null, false, { message: 'User not found'});
       } else {
         winston.debug(`User with email ${username} found in DB`);
-        return done(null, user);
+        if(bcrypt.compareSync(password, user.password)) {
+          winston.debug(`Passwords match !`);
+          return done(null, user);
+        } else {
+          winston.debug(`Passwords don't match !`);
+          return done(null, false, { message: 'Password is false'});
+        }
       }
     });
   }));

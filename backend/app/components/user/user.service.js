@@ -3,6 +3,7 @@ const winston = require('winston');
 const User = require('./user.model');
 
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const JWT_SECRET = require('../../config/web')[process.env.NODE_ENV || 'dev']["JWT_SECRET"];
 
@@ -18,7 +19,7 @@ exports.add = async (userObj) => {
   let user = new User();
   user.name = userObj.name;
   user.email = userObj.email;
-  user.password = userObj.password;
+  user.password = bcrypt.hashSync(userObj.password, 10);
 
   try {
     await user.save();
