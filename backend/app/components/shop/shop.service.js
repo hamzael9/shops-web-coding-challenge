@@ -27,7 +27,11 @@ exports.getById = async (id) => {
 exports.getNearby = async (id) => {
   try {
     winston.debug('Shop service getting nearby shops');
-    let shops = await Shop.find();
+    let shops = await Shop.find({
+      location: {
+        $near: { $geometry: {type: "Point", coordinates: [-5,30]} }
+      }
+    }).exec();
     // TODO: remove shops that are liked
     let likedShops = await userService.getLikedShops(id);
     let dislikedShops = await userService.getDislikedShops(id);
@@ -54,6 +58,7 @@ exports.getNearby = async (id) => {
     return sortShops(shops);
   } catch (err) {
     winston.error('Shop service Error: could not get nearby shops');
+    winston.debug(err);
     return false;
   }
 };
