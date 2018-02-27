@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 
 import { Link } from 'react-router-dom';
 
@@ -8,8 +9,14 @@ class Menu extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      logged: false
+    this.clickHandler = this.clickHandler.bind(this);
+  }
+
+  clickHandler (ev) {
+    if (ev.target.id === 'signout-link') {
+      if (localStorage.getItem('token')) {
+        localStorage.removeItem('token');
+      }
     }
   }
 
@@ -19,15 +26,15 @@ class Menu extends Component {
       <ul>
       <li className="main">
         <div>
-          <Link to="/shops/nearby">Nearby Shops</Link>
-          <Link to="/shops/preferred" >Preferred Shops</Link>
+          <Link id="nearby-link" to="/shops/nearby" onClick={this.clickHandler} ref={ (l) => { this.nearbyLink = l; }}>Nearby Shops</Link>
+          <Link id="preferred-link" to="/shops/preferred" onClick={this.clickHandler} ref={ (l) => { this.preferredLink = l; }}>Preferred Shops</Link>
         </div>
       </li>
       <li className="side">
         <div>
-          <Link to="/signin">Sign-in</Link>
-          <Link to="/signin" onClick={()=>{localStorage.removeItem("token")}}>Sign-out</Link>
-          <Link to="/signup">Sign-up</Link>
+          <Link id="signin-link"  to="/signin" onClick={this.clickHandler} ref={(l) => { this.signinLink = l; }}>Sign-in</Link>
+          <Link id="signout-link" to="/signin" onClick={this.clickHandler} ref={(l) => { this.signoutLink = l; }}>Sign-out</Link>
+          <Link id="signup-link"  to="/signup" onClick={this.clickHandler} ref={(l) => { this.signupLink = l; }}>Sign-up</Link>
         </div>
       </li>
       </ul>

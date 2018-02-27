@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 import { Switch, Route, Redirect } from 'react-router-dom';
@@ -11,12 +10,12 @@ import Register from './components/Register/Register';
 import ShopDisplay from './components/ShopDisplay/ShopDisplay';
 
 class App extends Component {
-
+/*
   constructor (props) {
     super(props);
     localStorage.removeItem('token');
   }
-
+*/
   render() {
     return (
       <div className="App">
@@ -29,6 +28,7 @@ class App extends Component {
           <Route path='/signup' component={Register}/>
           <PrivateRoute authed={localStorage.getItem('token') ? true : false} exact path='/shops/:type' component= {ShopDisplay}/>
           <PrivateRoute authed={localStorage.getItem('token') ? true : false} path='/shops/:type' component= {ShopDisplay}/>
+          <Redirect to="/signin" />
         </Switch>
         </main>
       </div>

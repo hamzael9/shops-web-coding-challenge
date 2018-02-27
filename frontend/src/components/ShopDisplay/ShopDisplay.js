@@ -50,7 +50,7 @@ class ShopDisplay extends Component {
       return item.props.id !== id;
     });
     this.setState({
-      ... this.state,
+      ...this.state,
       data: res
     })
   }
@@ -81,7 +81,6 @@ class ShopDisplay extends Component {
   }
 
   refreshShops (mode) {
-    let shops = [];
     let url = "";
 
     if (!localStorage.getItem('token')) {
@@ -111,6 +110,8 @@ class ShopDisplay extends Component {
       console.log('preferred');
       url = 'http://localhost:3000/api/v1/users/shops/liked';
       this.fetchShops(url);
+    } else {
+      this.props.history.push('/shops/nearby');
     }
   }
 
@@ -118,7 +119,7 @@ class ShopDisplay extends Component {
     return (
       <div className="ShopDisplay">
         <div>
-          <h1>{`${this.state.filter} Shops`}</h1>
+          <h1 className="title">{`${this.state.filter} Shops`}</h1>
         </div>
         <div>
           { this.state.data  }

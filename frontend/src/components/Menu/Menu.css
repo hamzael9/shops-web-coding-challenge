@@ -1,8 +1,16 @@
+.App-menu {
+  padding-top: 6px;
+}
+
 .App-menu a {
   margin-left: 40px;
   margin-top: 5px;
   text-decoration: none;
   color: white;
+}
+
+.App-menu a.selected {
+  color: cyan;
 }
 
 .App-menu li {

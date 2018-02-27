@@ -3,9 +3,6 @@ import React, { Component } from 'react';
 import './ShopItem.css';
 
 class ShopItem extends Component {
-  constructor (props) {
-    super(props);
-  }
 
   componentWillUnmount () {
     console.log('Unmounting shop item ');
@@ -65,7 +62,7 @@ class ShopItem extends Component {
     return (
       <article className="shop-item">
           <div className="up">
-            <h2 className="shop-title">{this.props.name}</h2>
+            <h2 className="title">{this.props.name}</h2>
           </div>
           <div className="middle">
             <img className="shop-img" src={this.props.img} alt="" />

@@ -6,6 +6,7 @@
   height: 220px;
   width: 220px;
   margin: 20px;
+  padding-top: 10px;
   border: 1px solid black;
   cursor: pointer;
 }
@@ -18,8 +19,9 @@
   height: 15%;
 }
 
-.shop-item .up .shop-title {
-  font-size: 20px;
+.shop-item .up .title {
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .shop-item .middle {
@@ -30,6 +32,7 @@
 
 .shop-item .down {
   height: 20%;
+  padding-top: 10px;
 }
 
 .shop-item .down .shop-btn {

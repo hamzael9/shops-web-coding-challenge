@@ -70,6 +70,7 @@ class Register extends Component {
               <button type="submit">Sign-in</button>
             </div>
         </form>
+      {localStorage.getItem('token') ? <Redirect from="/signup" to="/shops/nearby" /> : null}
       </div>
 
     );
