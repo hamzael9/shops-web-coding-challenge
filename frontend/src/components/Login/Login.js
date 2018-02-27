@@ -19,6 +19,10 @@ class Login extends Component {
       this.setState ( {
         logged: true
       } );
+    } else {
+      this.setState ( {
+        logged: true
+      } );
     }
   }
 
@@ -45,18 +49,19 @@ class Login extends Component {
           localStorage.setItem('token', data.token);
           this.props.history.push('/shops/nearby');
         }).catch( (err) => {
-          console.log('problem in jsonifying login response')
+          console.log('problem in jsonifying login response');
         });
       } else {
-        console.error('Not authorized !');
+        console.error('User with given credentials Not authorized by the server !');
       }
     } )
-    .catch ( (err) => { console.error('Error fetching ...'); } );
+    .catch ( (err) => { console.error('Error in Login Fetch ...'); } );
 
   }
 
   render() {
     return (
+
       <div className="Login">
         <h1>Login</h1>
         <form onSubmit={this.submitHandler}>
@@ -72,9 +77,8 @@ class Login extends Component {
               <button type="submit">Sign-in</button>
             </div>
         </form>
-        { this.state.logged ? <Redirect from="/signin" to="/shops/nearby" /> : null }
+      {localStorage.getItem('token') ? <Redirect from="/signin" to="/shops/nearby" /> : null}
       </div>
-
     );
   }
 }

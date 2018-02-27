@@ -8,10 +8,6 @@ const userService = require('../user/user.service');
 
 const Shop = require('./shop.model');
 
-const sortShops = (shops) => {
-  // TODO: Sort shops
-  return shops;
-};
 
 exports.getById = async (id) => {
   try {
@@ -27,6 +23,7 @@ exports.getById = async (id) => {
 exports.getNearby = async (id, longitude, latitude) => {
   try {
     winston.debug('Shop service getting nearby shops');
+    // If coordinates are not specified just get the shops as they are from the DB
     let shops;
     if (longitude && latitude) {
       shops = await Shop.find({
@@ -38,30 +35,27 @@ exports.getNearby = async (id, longitude, latitude) => {
       shops = await Shop.find();
     }
 
-    // TODO: remove shops that are liked
+    // Get Special shops ( liked & disliked )
     let likedShops = await userService.getLikedShops(id);
     let dislikedShops = await userService.getDislikedShops(id);
     let specialShops = [...likedShops, ...dislikedShops];
     console.log(specialShops);
-    // Check Liked and Disliked Shops
+    // If Liked || if Disliked less than two hours don't show
     for (let i = 0 ; i < shops.length ; i++) {
       for (let sp of specialShops) {
         if (shops[i]._id.toString() === sp.shopId.toString()) {
           if (sp.likedTime) {
             shops.splice(i,1);
           } else if (sp.dislikedTime) {
-            // check time is less than two hours
             let duration = moment.duration(moment().diff(moment(sp.dislikedTime)));
             if (duration.asHours() < 2) {
               shops.splice(i,1);
             }
           }
-
         }
       }
     }
-    // TODO: remove shops that are disliked less than two hours
-    return sortShops(shops);
+    return shops;
   } catch (err) {
     winston.error('Shop service Error: could not get nearby shops');
     winston.debug(err);

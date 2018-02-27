@@ -6,13 +6,32 @@ import ShopItem from '../ShopItem/ShopItem';
 
 class ShopDisplay extends Component {
   constructor(props) {
-    console.log('Constructing Shop Display ...');
+    console.log('Constructing ShopDisplay ...');
     super(props);
-    console.log(this);
+
     this.state = {
       filter: this.pathNameToTitle(),
       data: []
-    }
+    };
+
+    let unlisten = this.props.history.listen((location, action) => {
+      console.log('history refresh');
+      if (location.pathname.includes('preferred') || location.pathname.includes('nearby')) {
+        this.refreshShops(location.pathname);
+      }
+    });
+    this.stopHistoryUnlisten = unlisten;
+  }
+
+  componentDidMount() {
+    console.log('ShopDisplay did mount');
+
+    this.refreshShops(this.props.location.pathname);
+  }
+
+  componentWillUnmount() {
+    console.log('ShopDisplay Will unmount');
+    this.stopHistoryUnlisten();
   }
 
   pathNameToTitle () {
@@ -34,13 +53,6 @@ class ShopDisplay extends Component {
       ... this.state,
       data: res
     })
-  }
-
-  componentDidMount() {
-    this.refreshShops(this.props.location.pathname);
-    this.props.history.listen((location, action) => {
-      this.refreshShops(location.pathname);
-    });
   }
 
   fetchShops (url,x,y) {
@@ -71,30 +83,35 @@ class ShopDisplay extends Component {
   refreshShops (mode) {
     let shops = [];
     let url = "";
-        if (mode === '/shops/nearby') {
-          console.log('nearby');
 
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition( (position) => {
-              console.log(position.coords.longitude, position.coords.latitude);
-              url = `http://localhost:3000/api/v1/shops/nearby?x=${position.coords.longitude}&y=${position.coords.longitude}`;
-              this.fetchShops(url);
-            }, (err) => {
-              console.log('No permission for geolocation.');
-              url = `http://localhost:3000/api/v1/shops/nearby`;
-              this.fetchShops(url);
-            });
-          } else {
-            console.log("Geolocation is not supported.");
-            url = `http://localhost:3000/api/v1/shops/nearby`;
-            this.fetchShops(url);
-          }
+    if (!localStorage.getItem('token')) {
+      this.props.history.push('/signin');
+    }
 
-        } else if (mode === '/shops/preferred') {
-          console.log('preferred');
-          url = 'http://localhost:3000/api/v1/users/shops/liked';
+    if (mode === '/shops/nearby') {
+      console.log('nearby');
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition( (position) => {
+          console.log(position.coords.longitude, position.coords.latitude);
+          url = `http://localhost:3000/api/v1/shops/nearby?x=${position.coords.longitude}&y=${position.coords.longitude}`;
           this.fetchShops(url);
-        }
+        }, (err) => {
+          console.log('No permission for geolocation.');
+          url = `http://localhost:3000/api/v1/shops/nearby`;
+          this.fetchShops(url);
+        });
+      } else {
+        console.log("Geolocation is not supported.");
+        url = `http://localhost:3000/api/v1/shops/nearby`;
+        this.fetchShops(url);
+      }
+
+    } else if (mode === '/shops/preferred') {
+      console.log('preferred');
+      url = 'http://localhost:3000/api/v1/users/shops/liked';
+      this.fetchShops(url);
+    }
   }
 
   render() {
