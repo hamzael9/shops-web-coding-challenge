@@ -10,14 +10,23 @@ class ShopDisplay extends Component {
     super(props);
     console.log(this);
     this.state = {
-      filter: "",
+      filter: this.pathNameToTitle(),
       data: []
     }
-    //this.handleItemUnmount = this.handleItemUnmount.bind(this);
+  }
+
+  pathNameToTitle () {
+    if (this.props.location.pathname.includes('nearby')) {
+      return "Nearby"
+    } else if (this.props.location.pathname.includes('preferred')) {
+      return "Preferred";
+    } else {
+      return "";
+    }
   }
 
   handleItemUnmount (id) {
-    console.log('Removing item ' + id);
+    console.log(`Removing item ${id}`);
     let res = this.state.data.filter (item => {
       return item.props.id !== id;
     });
@@ -28,62 +37,63 @@ class ShopDisplay extends Component {
   }
 
   componentDidMount() {
-    console.log(this);
-    this.getShops(this.props.location.pathname);
+    this.refreshShops(this.props.location.pathname);
     this.props.history.listen((location, action) => {
-      this.getShops(location.pathname);
+      this.refreshShops(location.pathname);
     });
   }
 
-  getShops (mode) {
+  fetchShops (url,x,y) {
+    let shops = [];
+    let isPreferred = !url.includes('nearby');
+    fetch(url, {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    })
+    .then ( (resp) =>  resp.json() )
+    .then ( (data) => {
+      console.log(data);
+      for (let s of data) {
+        shops.push (<ShopItem key={s._id} id={s._id} name={s.name} img={s.picture} preferred={isPreferred} selfUnmount={this.handleItemUnmount.bind(this)}/>);
+      }
 
-        let shops = [];
+      this.setState( {
+        filter: this.pathNameToTitle(),
+        data: shops
+      });
+
+    })
+    .catch( (err) => {
+      console.error(err);
+    });
+  }
+
+  refreshShops (mode) {
+    let shops = [];
+    let url = "";
         if (mode === '/shops/nearby') {
           console.log('nearby');
-          fetch('http://localhost:3000/api/v1/shops/nearby', {
-            method: 'GET',
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-          })
-          .then ( (resp) =>  resp.json() )
-          .then ( (data) => {
 
-            console.log(data);
-            for (let s of data) {
-              shops.push (<ShopItem key={s._id} id={s._id} name={s.name} img={s.picture} preferred={false} selfUnmount={this.handleItemUnmount.bind(this)}/>);
-            }
-
-            this.setState( {
-              filter: "Nearby",
-              data: shops
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition( (position) => {
+              console.log(position.coords.longitude, position.coords.latitude);
+              url = `http://localhost:3000/api/v1/shops/nearby?x=${position.coords.longitude}&y=${position.coords.longitude}`;
+              this.fetchShops(url);
+            }, (err) => {
+              console.log('No permission for geolocation.');
+              url = `http://localhost:3000/api/v1/shops/nearby`;
+              this.fetchShops(url);
             });
+          } else {
+            console.log("Geolocation is not supported.");
+            url = `http://localhost:3000/api/v1/shops/nearby`;
+            this.fetchShops(url);
+          }
 
-          })
-          .catch( (err) => {
-            console.error(err);
-          });
         } else if (mode === '/shops/preferred') {
           console.log('preferred');
-          fetch('http://localhost:3000/api/v1/users/shops/liked', {
-            method: 'GET',
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-          })
-          .then ( (resp) =>  resp.json() )
-          .then ( (data) => {
-
-            console.log(data);
-            for (let s of data) {
-              shops.push (<ShopItem key={s._id} id={s._id} name={s.name} img={s.picture} preferred={true} selfUnmount={this.handleItemUnmount.bind(this)}/>);
-            }
-
-            this.setState({
-              filter: "Preferred",
-              data: shops
-            });
-
-          })
-          .catch( (err) => {
-            console.error(err);
-          });
+          url = 'http://localhost:3000/api/v1/users/shops/liked';
+          this.fetchShops(url);
         }
   }
 

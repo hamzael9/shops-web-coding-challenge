@@ -22,6 +22,7 @@ class App extends Component {
           <Route path='/login' component={Login}/>
           <PrivateRoute authed={localStorage.getItem('token') ? true : false} exact path='/shops/:type' component= {ShopDisplay}/>
           <PrivateRoute authed={localStorage.getItem('token') ? true : false} path='/shops/:type' component= {ShopDisplay}/>
+          <Redirect to='/shops/nearby' />
         </Switch>
         </main>
       </div>

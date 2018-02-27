@@ -8,8 +8,3 @@
 .App-menu a:hover {
   color: cyan;
 }
-
-.App-menu a.selected {
-  border-bottom: 1px solid cyan;
-  color: cyan;
-}

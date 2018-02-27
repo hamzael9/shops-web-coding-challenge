@@ -24,14 +24,20 @@ exports.getById = async (id) => {
   }
 }
 
-exports.getNearby = async (id) => {
+exports.getNearby = async (id, longitude, latitude) => {
   try {
     winston.debug('Shop service getting nearby shops');
-    let shops = await Shop.find({
-      location: {
-        $near: { $geometry: {type: "Point", coordinates: [-5,30]} }
-      }
-    }).exec();
+    let shops;
+    if (longitude && latitude) {
+      shops = await Shop.find({
+        location: {
+          $near: { $geometry: {type: "Point", coordinates: [longitude,latitude]} }
+        }
+      }).exec();
+    } else {
+      shops = await Shop.find();
+    }
+
     // TODO: remove shops that are liked
     let likedShops = await userService.getLikedShops(id);
     let dislikedShops = await userService.getDislikedShops(id);
