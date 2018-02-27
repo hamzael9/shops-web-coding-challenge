@@ -8,7 +8,9 @@ class ShopDisplay extends Component {
   constructor(props) {
     console.log('Constructing Shop Display ...');
     super(props);
+    console.log(this);
     this.state = {
+      filter: "",
       data: []
     }
     //this.handleItemUnmount = this.handleItemUnmount.bind(this);
@@ -20,12 +22,14 @@ class ShopDisplay extends Component {
       return item.props.id !== id;
     });
     this.setState({
+      ... this.state,
       data: res
     })
   }
 
   componentDidMount() {
-    this.getShops("/shops/nearby");
+    console.log(this);
+    this.getShops(this.props.location.pathname);
     this.props.history.listen((location, action) => {
       this.getShops(location.pathname);
     });
@@ -49,12 +53,13 @@ class ShopDisplay extends Component {
             }
 
             this.setState( {
+              filter: "Nearby",
               data: shops
             });
 
           })
-          .catch( (Err) => {
-            console.log(Err);
+          .catch( (err) => {
+            console.error(err);
           });
         } else if (mode === '/shops/preferred') {
           console.log('preferred');
@@ -71,12 +76,13 @@ class ShopDisplay extends Component {
             }
 
             this.setState({
+              filter: "Preferred",
               data: shops
             });
 
           })
-          .catch( (Err) => {
-            console.log(Err);
+          .catch( (err) => {
+            console.error(err);
           });
         }
   }
@@ -85,7 +91,7 @@ class ShopDisplay extends Component {
     return (
       <div className="ShopDisplay">
         <div>
-          <h1>{`${this.props.match.params.type} Shops`}</h1>
+          <h1>{`${this.state.filter} Shops`}</h1>
         </div>
         <div>
           { this.state.data  }

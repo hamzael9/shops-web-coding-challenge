@@ -69,7 +69,7 @@ class Login extends Component {
               <button type="submit">Sign-in</button>
             </div>
         </form>
-        { this.state.logged ? <Redirect from="/login" to="/nearby" /> : null }
+        { this.state.logged ? <Redirect from="/login" to="/shops/nearby" /> : null }
       </div>
 
     );

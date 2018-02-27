@@ -3,8 +3,8 @@
 }
 .shop-item {
   display: inline-block;
-  height: 200px;
-  width: 200px;
+  height: 220px;
+  width: 220px;
   margin: 20px;
   border: 1px solid black;
   cursor: pointer;
@@ -30,7 +30,6 @@
 
 .shop-item .down {
   height: 20%;
-  margin-top: 15px;
 }
 
 .shop-item .down .shop-btn {
