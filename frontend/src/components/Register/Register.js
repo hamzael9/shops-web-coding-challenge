@@ -2,32 +2,26 @@ import React, { Component } from 'react';
 
 import {Redirect} from 'react-router-dom';
 
-import './Login.css';
+import './Register.css';
 
-class Login extends Component {
+class Register extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      logged: false
     };
     this.submitHandler = this.submitHandler.bind(this);
   }
 
   componentWillMount() {
-    if (localStorage.getItem('token')) {
-      this.setState ( {
-        logged: true
-      } );
-    }
   }
 
   submitHandler(ev) {
     ev.preventDefault();
     console.log('Submitting form ...');
 
-    let payload = JSON.stringify({ email: "hamza@gmail.com", password: "passpass" });
-    fetch ('http://localhost:3000/api/v1/users/sign-in/', {
+    let payload = JSON.stringify({ name: "Hamza El", email: "hamza@gmail.com", password: "passpass" });
+    fetch ('http://localhost:3000/api/v1/users/sign-up/', {
       headers: {
       'Content-Type': 'application/json'
       },
@@ -37,12 +31,11 @@ class Login extends Component {
     .then ( (resp) => {
       if (resp.status === 200) {
         resp.json().then( (data) => {
-          console.log('data of login in :');
+          console.log('data of register in :');
           console.log(data);
-          localStorage.setItem('token', data.token);
-          this.props.history.push('/nearby');
+          this.props.history.push('/sign-in');
         }).catch( (err) => {
-          console.log('problem in jsonifying login response')
+          console.log('problem in jsonifying register response')
         });
       } else {
         console.error('Not authorized !');
@@ -54,9 +47,13 @@ class Login extends Component {
 
   render() {
     return (
-      <div className="Login">
+      <div className="Register">
         <h1>Login</h1>
         <form onSubmit={this.submitHandler}>
+            <div className="field">
+              <label htmlFor="name">Name: </label>
+              <input type="text" name="name" />
+            </div>
             <div className="field">
               <label htmlFor="email">E-mail: </label>
               <input type="text" name="email" />
@@ -69,11 +66,10 @@ class Login extends Component {
               <button type="submit">Sign-in</button>
             </div>
         </form>
-        { this.state.logged ? <Redirect from="/signin" to="/shops/nearby" /> : null }
       </div>
 
     );
   }
 }
 
-export default Login;
+export default Register;

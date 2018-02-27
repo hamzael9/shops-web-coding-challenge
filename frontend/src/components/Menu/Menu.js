@@ -9,9 +9,21 @@ class Menu extends Component {
   render() {
     return (
       <nav className="App-menu">
+      <ul>
+      <li className="main">
+        <div>
           <Link to="/shops/nearby">Nearby Shops</Link>
           <Link to="/shops/preferred" >Preferred Shops</Link>
-          <Link to="/login">Sign-in</Link>
+        </div>
+      </li>
+      <li className="side">
+        <div>
+          <Link to="/signin">Sign-in</Link>
+          <Link to="/signin" onClick={()=>{localStorage.removeItem("token")}}>Sign-out</Link>
+          <Link to="/signup">Sign-up</Link>
+        </div>
+      </li>
+      </ul>
       </nav>
     );
   }

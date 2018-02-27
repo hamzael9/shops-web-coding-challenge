@@ -5,6 +5,14 @@
   color: white;
 }
 
+.App-menu li {
+  display: inline-block;
+}
+
+.App-menu li.side {
+  float: right;
+}
+
 .App-menu a:hover {
   color: cyan;
 }

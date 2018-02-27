@@ -7,6 +7,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Menu from './components/Menu/Menu';
 import Login from './components/Login/Login';
+import Register from './components/Register/Register';
 import ShopDisplay from './components/ShopDisplay/ShopDisplay';
 
 class App extends Component {
@@ -19,7 +20,8 @@ class App extends Component {
         </header>
         <main>
         <Switch>
-          <Route path='/login' component={Login}/>
+          <Route path='/signin' component={Login}/>
+          <Route path='/signup' component={Register}/>
           <PrivateRoute authed={localStorage.getItem('token') ? true : false} exact path='/shops/:type' component= {ShopDisplay}/>
           <PrivateRoute authed={localStorage.getItem('token') ? true : false} path='/shops/:type' component= {ShopDisplay}/>
           <Redirect to='/shops/nearby' />
