@@ -25,8 +25,11 @@ class Login extends Component {
   submitHandler(ev) {
     ev.preventDefault();
     console.log('Submitting form ...');
+    let email = this.emailInput.value;
+    let password = this.passwordInput.value;
+    console.log(email,password);
 
-    let payload = JSON.stringify({ email: "hamza@gmail.com", password: "passpass" });
+    let payload = JSON.stringify({ email: email, password: password });
     fetch ('http://localhost:3000/api/v1/users/sign-in/', {
       headers: {
       'Content-Type': 'application/json'
@@ -40,7 +43,7 @@ class Login extends Component {
           console.log('data of login in :');
           console.log(data);
           localStorage.setItem('token', data.token);
-          this.props.history.push('/nearby');
+          this.props.history.push('/shops/nearby');
         }).catch( (err) => {
           console.log('problem in jsonifying login response')
         });
@@ -59,11 +62,11 @@ class Login extends Component {
         <form onSubmit={this.submitHandler}>
             <div className="field">
               <label htmlFor="email">E-mail: </label>
-              <input type="text" name="email" />
+              <input type="text" name="email" ref={(input) => {this.emailInput = input; }}/>
             </div>
             <div className="field">
               <label htmlFor="password">Password: </label>
-              <input type="password" name="password" />
+              <input type="password" name="password" ref={(input) => {this.passwordInput = input; }} />
             </div>
             <div className="field">
               <button type="submit">Sign-in</button>
