@@ -9,8 +9,8 @@ class Menu extends Component {
   render() {
     return (
       <nav className="App-menu">
-          <Link to="" className="selected">Nearby Shops</Link>
-          <Link to="/preferred">Preferred Shops</Link>
+          <Link to="/shops/nearby" className="selected">Nearby Shops</Link>
+          <Link to="/shops/preferred" >Preferred Shops</Link>
           <Link to="/login">Sign-in</Link>
       </nav>
     );

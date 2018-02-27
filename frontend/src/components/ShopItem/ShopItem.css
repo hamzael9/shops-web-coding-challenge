@@ -1,13 +1,21 @@
+.hidden {
+  display: none;
+}
 .shop-item {
   display: inline-block;
   height: 200px;
   width: 200px;
   margin: 20px;
   border: 1px solid black;
+  cursor: pointer;
+}
+
+.shop-item:hover {
+  border-color:red;
 }
 
 .shop-item .up {
-  height: 20%;
+  height: 15%;
 }
 
 .shop-item .up .shop-title {
@@ -15,11 +23,14 @@
 }
 
 .shop-item .middle {
-  height: 60%;
+  height: 150px;
+  width: 150px;
+  display: inline-block;
 }
 
 .shop-item .down {
   height: 20%;
+  margin-top: 15px;
 }
 
 .shop-item .down .shop-btn {
@@ -43,6 +54,6 @@
   background-color: green;
 }
 
-.shop-item .down .dislike-btn {
+.shop-item .down .dislike-btn, .shop-item .down .remove-btn {
   background-color: red;
 }

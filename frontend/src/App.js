@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 
 import Menu from './components/Menu/Menu';
@@ -20,13 +20,23 @@ class App extends Component {
         <main>
         <Switch>
           <Route path='/login' component={Login}/>
-          <Route exact path='/' render={() => <ShopDisplay type="Nearby" />}/>
-          <Route path='/preferred' render={() => <ShopDisplay type="Preferred" />}/>
+          <PrivateRoute authed={localStorage.getItem('token') ? true : false} exact path='/shops/:type' component= {ShopDisplay}/>
+          <PrivateRoute authed={localStorage.getItem('token') ? true : false} path='/shops/:type' component= {ShopDisplay}/>
         </Switch>
         </main>
       </div>
     );
   }
+
+}
+
+const PrivateRoute = ({component: Component, authed, ...rest})=>{
+  return (
+    <Route
+    {...rest}
+    render={(props) => ((authed === true)) ? <Component {...props} /> : <Redirect to={'/login'} />}
+    />
+  )
 }
 
 export default App;
