@@ -1,5 +1,6 @@
 
 const winston = require('winston');
+const moment = require('moment');
 
 const mongoose = require('mongoose');
 
@@ -29,14 +30,23 @@ exports.getNearby = async (id) => {
     let shops = await Shop.find();
     // TODO: remove shops that are liked
     let likedShops = await userService.getLikedShops(id);
-    console.log(likedShops);
+    let dislikedShops = await userService.getDislikedShops(id);
+    let specialShops = [...likedShops, ...dislikedShops];
+    console.log(specialShops);
+    // Check Liked and Disliked Shops
     for (let i = 0 ; i < shops.length ; i++) {
-      for (let ls of likedShops) {
-        //console.log(shops[i]._id);
-        //console.log(ls.shopId);
-        if (shops[i]._id.toString() === ls.shopId.toString()) {
-          console.log('slicing !');
-          shops.splice(i,1);
+      for (let sp of specialShops) {
+        if (shops[i]._id.toString() === sp.shopId.toString()) {
+          if (sp.likedTime) {
+            shops.splice(i,1);
+          } else if (sp.dislikedTime) {
+            // check time is less than two hours
+            let duration = moment.duration(moment().diff(moment(sp.dislikedTime)));
+            if (duration.asHours() < 2) {
+              shops.splice(i,1);
+            }
+          }
+
         }
       }
     }

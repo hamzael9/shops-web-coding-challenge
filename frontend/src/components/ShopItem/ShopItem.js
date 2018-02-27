@@ -33,7 +33,14 @@ class ShopItem extends Component {
     console.log('dislike');
     if (!this.props.preferred) {
       fetch (`http://localhost:3000/api/v1/users/shops/disliked/${this.props.id}`, { headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}, method: 'POST' })
-      .then ( (resp) => { if (resp.status === 200) { console.log ('OK'); } else { console.log(`Status returned ${resp.status}`); }}  )
+      .then ( (resp) => {
+        if (resp.status === 200) {
+          console.log ('Shop Item Disliked !');
+          this.props.selfUnmount(this.props.id);
+        }
+        else {
+          console.log(`Status returned ${resp.status}`); }
+        }   )
       .catch( (err) => { console.error(err); } );
     }
   }
