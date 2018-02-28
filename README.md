@@ -1,4 +1,12 @@
 
+## Table of Content:
+  - [Idea of the app](#idea-of-the-app)
+  - [Features](#features)
+  - [Technologies used](#technologies-used)
+  - [Folder structure](#folder-structure)
+  - [Steps to Install](#steps-to-install)
+  - [Screenshots](#screenshots)
+
 This is a Full-Stack web coding challenge.
 ( https://github.com/hiddenfounders/web-coding-challenge/blob/master/README.md )
 ## Idea of the app
