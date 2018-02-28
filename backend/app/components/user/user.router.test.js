@@ -47,6 +47,18 @@ module.exports = (app, chai) => {
                     done();
                 });
           });
+// invalid request Sign in Test
+        it('Sign-in', (done) => {
+          credentials.email = "forgotat.com";
+          credentials.password = user.password;
+            chai.request(app)
+                .post('/api/v1/users/sign-in')
+                .send(credentials)
+                .end((err, res) => {
+                    res.should.have.status(400);
+                    done();
+                });
+          });
 // Add a shop to preferred
           it('Add Preferred Shop ', (done) => {
             Shop.findOne({}).then ( (res) => {
