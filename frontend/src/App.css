@@ -13,3 +13,13 @@
 .hidden {
   display: none;
 }
+
+form input[type=text],  form input[type=email], form input[type=password]{
+  text-align: center;
+}
+
+.error-msg {
+  padding: 20px;
+  border: 1px solid red;
+  color: red;
+}
