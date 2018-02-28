@@ -37,3 +37,24 @@ The task is to implement an app that lists shops nearby.
 - By default the backend app runs at localhost:8080
 - By default the frontend app runs at localhost:3000
 - A proxy is setup in the package.json of the frontend app to route the requests.
+
+## Screenshots
+- Register :
+
+![Register snapshot](./screenshots/register.png)
+
+- Sign-in :
+
+![Login snapshot](./screenshots/login.png)
+
+- Get shops sorted by geolocalisation:
+
+![Location snapshot](./screenshots/location.png)
+
+- List nearby shops:
+
+![Nearby snapshot](./screenshots/nearby.png)
+
+Add and Remove shops from preferred shops list:
+
+![Preferred snapshot](./screenshots/preferred.png)
