@@ -1,4 +1,5 @@
 const winston = require('winston');
+const validator = require('validator');
 
 const passport = require('passport');
 
@@ -7,9 +8,14 @@ const shopService = require('../shop/shop.service');
 
 exports.signUpHandler = async (req, resp) => {
   let userObj = {};
-  userObj.name = req.body.name;
+  userObj.name = req.body.name || "";
   userObj.email = req.body.email;
   userObj.password = req.body.password;
+
+  if ( userObj.name.length === 0 || !validator.isEmail(userObj.email) || userObj.password.length < 8 ) {
+    resp.status(400).json({msg: "invalid request params"});
+    return ;
+  }
 
   let res = await userService.add(userObj);
   if (res) {
@@ -22,6 +28,12 @@ exports.signUpHandler = async (req, resp) => {
 
 exports.signInHandler = (req, resp) => {
   winston.debug('Authenticating ...');
+
+  if (!validator.isEmail(req.body.email) || req.body.password.length < 8) {
+    resp.status(400).json({msg: 'invalid request params'});
+    return ;
+  }
+
   passport.authenticate('local', (err, user, info) => {
     if (err) {
       winston.error('Sign-in Controller Error');

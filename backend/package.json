@@ -23,6 +23,7 @@
     "morgan": "^1.9.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
+    "validator": "^9.4.1",
     "winston": "^2.4.0"
   },
   "devDependencies": {
